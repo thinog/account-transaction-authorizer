@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Application\TransactionAuthorizer.Application\TransactionAuthorizer.Application.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\TransactionAuthorizer.Infrastructure.IoC\TransactionAuthorizer.Infrastructure.IoC.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+</Project>
