@@ -6,19 +6,27 @@ namespace TransactionAuthorizer.Presentation.CLI
     {
         static void Main(string[] args)
         {
-            int i = 1;
+            if(Console.IsInputRedirected)
+            {                
+                int i = 1;
+                string line;
 
-            Console.WriteLine("Starting...");            
-
-            string line;
-
-            do
+                while((line = Console.ReadLine()) != null)
+                {
+                    Console.Write($"Line {i++}: ");
+                    Console.WriteLine(line);                
+                }
+            } 
+            else 
             {
-                line = Console.ReadLine();
-                Console.Write($"Arg {i}: ");
-                Console.WriteLine(line);
-                Console.WriteLine($"IsInputRedirected: {Console.IsInputRedirected}");
-            } while(!string.IsNullOrWhiteSpace(line));
+                MissingInput();
+            }
+        }
+
+        private static void MissingInput()
+        {
+            Console.WriteLine("Missing input!");
+            Console.WriteLine("USAGE: $ authorize < operations_file");
         }
     }
 }
