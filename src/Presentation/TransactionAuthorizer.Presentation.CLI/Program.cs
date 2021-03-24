@@ -1,4 +1,6 @@
 ﻿using System;
+using Newtonsoft.Json;
+using TransactionAuthorizer.Application.Factories;
 
 namespace TransactionAuthorizer.Presentation.CLI
 {
@@ -9,12 +11,15 @@ namespace TransactionAuthorizer.Presentation.CLI
             if(Console.IsInputRedirected)
             {                
                 int i = 1;
-                string line;
+                string input;
 
-                while((line = Console.ReadLine()) != null)
+                while((input = Console.ReadLine()) != null)
                 {
-                    Console.Write($"Line {i++}: ");
-                    Console.WriteLine(line);                
+                    Console.WriteLine($"Input {i++}: {input}");
+                    var useCase = UseCaseFactory.CreateUseCase(input);                    
+                    useCase.UseCase.Execute(useCase.InputPort);
+                    var output = useCase.UseCase.ToString();
+                    Console.WriteLine($"Output {i++}: {output}");
                 }
             } 
             else 
