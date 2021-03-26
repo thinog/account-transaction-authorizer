@@ -12,30 +12,37 @@ namespace TransactionAuthorizer.Application.Factories
     public static class UseCaseFactory
     {
         #pragma warning disable 0618 // disables warning of "obsolete method"
-        public static (IUseCase UseCase, IInputPort InputPort) CreateUseCase(string json)
+        public static (IUseCase UseCase, IInputPort InputPort) CreateUseCase(string json, IServiceProvider serviceProvider)
         {
-            var useCases = GetAllUseCases();
-
-            foreach(var useCase in useCases)
+            try
             {
-                var handledObject = (HandledObjectAttribute)useCase.GetCustomAttributes(typeof(HandledObjectAttribute), false).FirstOrDefault();
+                var useCases = GetAllUseCases();
 
-                if(handledObject is not null)
+                foreach(var useCase in useCases)
                 {
-                    var jSchema = new JsonSchemaGenerator().Generate(handledObject.GetType());
-                    var jObject = JObject.Parse(json);
+                    var handledObject = (HandledObjectAttribute)useCase.GetCustomAttributes(typeof(HandledObjectAttribute), false).FirstOrDefault();
 
-                    bool valid = jObject.IsValid(jSchema);
-
-                    if(valid)
+                    if(handledObject is not null)
                     {
-                        var inputPort = JsonConvert.DeserializeObject(json, handledObject.GetType());
-                        return ((IUseCase)Activator.CreateInstance(useCase), (IInputPort)inputPort);
+                        var jSchema = new JsonSchemaGenerator().Generate(handledObject.ObjectType);
+                        var jObject = JObject.Parse(json);
+
+                        bool valid = jObject.IsValid(jSchema);
+
+                        if(valid)
+                        {
+                            var inputPort = JsonConvert.DeserializeObject(json, handledObject.ObjectType);
+                            return ((IUseCase)serviceProvider.GetService(useCase), (IInputPort)inputPort);
+                        }
                     }
                 }
-            }
 
-            return (null, null);
+                return (null, null);
+            }
+            catch (JsonReaderException)
+            {
+                throw new JsonReaderException("Invalid JSON format!");
+            }
         }
         #pragma warning restore 0618 // enables warning of "obsolete method"
 

@@ -9,5 +9,6 @@ namespace TransactionAuthorizer.Domain.Interfaces.Repositories
     {
         IEnumerable<TEntity> GetByExpression(Expression<Func<TEntity, bool>> where);
         bool Insert(TEntity entity);
+        bool Update(TEntity entity);
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using Newtonsoft.Json;
+using TransactionAuthorizer.Domain.Entities;
 
 namespace TransactionAuthorizer.Application.Models
 {
@@ -16,5 +17,12 @@ namespace TransactionAuthorizer.Application.Models
         [JsonProperty("time")]
         [JsonRequired]
         public DateTime Time { get; set; }
+
+        public TransactionDetailsModel(Transaction transaction)
+        {
+            Merchant = transaction.Merchant;
+            Amount = transaction.Value;
+            Time = transaction.Time;
+        }
     }
 }

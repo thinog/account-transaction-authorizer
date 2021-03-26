@@ -5,9 +5,6 @@ namespace TransactionAuthorizer.Infrastructure.Repositories.Context
 {
     public class TransactionAuthorizerContext : DbContext
     {
-        public DbSet<Account> Accounts { get; set; }
-        public DbSet<Transaction> Transactions { get; set; }
-
         public TransactionAuthorizerContext(DbContextOptions<TransactionAuthorizerContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

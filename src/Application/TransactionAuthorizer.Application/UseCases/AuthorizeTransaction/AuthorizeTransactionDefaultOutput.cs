@@ -1,3 +1,4 @@
+using System.Linq;
 using TransactionAuthorizer.Application.Enums;
 using TransactionAuthorizer.Application.Models;
 
@@ -11,6 +12,7 @@ namespace TransactionAuthorizer.Application.UseCases.AuthorizeTransaction
         }
 
         public AccountModel Account { get; set; }
+        public bool HasErrors => Account.Violations.Any();
 
         public void Ok(AccountDetailsModel accountDetails)
         {

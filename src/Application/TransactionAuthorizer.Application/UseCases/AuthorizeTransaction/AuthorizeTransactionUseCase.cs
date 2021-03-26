@@ -1,17 +1,26 @@
 using TransactionAuthorizer.Domain.Attributes;
 using TransactionAuthorizer.Domain.Interfaces.UseCases;
 using Newtonsoft.Json;
+using TransactionAuthorizer.Domain.Interfaces.Repositories;
+using TransactionAuthorizer.Application.Models;
+using System.Linq;
 
 namespace TransactionAuthorizer.Application.UseCases.AuthorizeTransaction
 {
     [HandledObject(typeof(AuthorizeTransactionInput))]
-    public class CreateAccountUseCase : IUseCase
+    public class AuthorizeTransactionUseCase : IUseCase
     {
-        IAuthorizeTransactionOutput _outputPort;
+        private IAuthorizeTransactionOutput _outputPort;
+        private IAccountRepository _accountRepository;
+        private ITransactionRepository _transactionRepository;
 
-        public CreateAccountUseCase()
+        public AuthorizeTransactionUseCase(
+            IAccountRepository accountRepository,
+            ITransactionRepository transactionRepository)
         {
             _outputPort = new AuthorizeTransactionDefaultOutput();
+            _accountRepository = accountRepository;
+            _transactionRepository = transactionRepository;
         }
 
         public void SetOutputPort(IOutputPort output)
@@ -23,9 +32,37 @@ namespace TransactionAuthorizer.Application.UseCases.AuthorizeTransaction
         {
             var inputPort = (AuthorizeTransactionInput)input;
 
-            _outputPort.Ok(new Models.AccountDetailsModel{ ActiveCard = true, AvailableLimit = 123 });
-            _outputPort.DoubledTransaction();
-            _outputPort.HighFrequencySmallInterval();
+            var account = _accountRepository.GetAccount();
+
+            if(account is null)
+                _outputPort.AccountNotInitialized();
+
+            if(!account.Active)
+                _outputPort.CardNotActive();
+
+            if((account.Limit - inputPort.Transaction.Amount) < 0)
+                _outputPort.InsufficientLimit();
+
+            var transactions = _transactionRepository.GetTransactionsByTime(2);
+            
+            if(transactions is not null)
+            {
+                if(transactions.Count() >= 3)
+                    _outputPort.HighFrequencySmallInterval();
+
+                if(transactions.GroupBy(t => new { t.Merchant, t.Value }).Any(tg => tg.Count() >= 2))
+                    _outputPort.DoubledTransaction();
+            }
+
+            if(!_outputPort.HasErrors)
+            {
+                account.Limit -= inputPort.Transaction.Amount;
+                
+                _transactionRepository.Insert(inputPort.ToTransactionEntity());
+                _accountRepository.Update(account);
+            }                        
+
+            _outputPort.Ok(new AccountDetailsModel(account));
         }
 
         public override string ToString()
