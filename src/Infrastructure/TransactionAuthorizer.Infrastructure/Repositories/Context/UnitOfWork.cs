@@ -5,9 +5,9 @@ namespace TransactionAuthorizer.Infrastructure.Repositories.Context
 {
     public class UnitOfWork : IUnitOfWork
     {
-        DbContext _context;
+        TransactionAuthorizerContext _context;
 
-        public UnitOfWork(DbContext context)
+        public UnitOfWork(TransactionAuthorizerContext context)
         {
             _context = context;
         }

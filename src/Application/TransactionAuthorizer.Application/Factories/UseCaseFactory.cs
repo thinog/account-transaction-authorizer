@@ -29,7 +29,7 @@ namespace TransactionAuthorizer.Application.Factories
 
                         bool valid = jObject.IsValid(jSchema);
 
-                        if(valid)                            
+                        if(valid) 
                             return (IUseCase)serviceProvider.GetService(useCaseType);
                     }
                 }

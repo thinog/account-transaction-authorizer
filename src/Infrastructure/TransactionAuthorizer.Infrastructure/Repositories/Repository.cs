@@ -11,7 +11,7 @@ namespace TransactionAuthorizer.Infrastructure.Repositories
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, IEntity
     {
-        protected readonly TransactionAuthorizerContext _context;
+        private readonly TransactionAuthorizerContext _context;
         protected readonly DbSet<TEntity> _dbSet;
 
         public Repository(TransactionAuthorizerContext context)

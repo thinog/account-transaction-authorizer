@@ -22,17 +22,11 @@ namespace TransactionAuthorizer.Infrastructure.IoC
 
         private static IServiceCollection Configure(IServiceCollection serviceCollection)
         {
-            var inMemoryDatabaseRoot = new InMemoryDatabaseRoot();
+            serviceCollection.AddDbContext<TransactionAuthorizerContext>(options => options.UseInMemoryDatabase("TransactionAuthorizer"));
 
-            serviceCollection
-                .AddEntityFrameworkInMemoryDatabase()
-                .AddDbContext<TransactionAuthorizerContext>(options => options.UseInMemoryDatabase("TransactionAuthorizer", inMemoryDatabaseRoot), ServiceLifetime.Singleton, ServiceLifetime.Singleton);
-
-            serviceCollection.AddScoped<DbContext, TransactionAuthorizerContext>();
-
+            serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
             serviceCollection.AddScoped<ITransactionRepository, TransactionRepository>();
             serviceCollection.AddScoped<IAccountRepository, AccountRepository>();
-            serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
 
             serviceCollection.AddScoped<AuthorizeTransactionUseCase>();
             serviceCollection.AddScoped<CreateAccountUseCase>();
