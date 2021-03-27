@@ -9,11 +9,11 @@ namespace TransactionAuthorizer.Application.Enums
 
         public string Value { get; set; }
 
-        public static Violation AccountAlreadyInitialized => new Violation("account-already-initialized");
-        public static Violation AccountNotInitialized => new Violation("account-not-initialized");
-        public static Violation CardNotActive => new Violation("card-not-active");
-        public static Violation InsuficientLimit => new Violation("insuficient-limit");
-        public static Violation HighFrequencySmallInterval => new Violation("high-frequency-small-interval");
-        public static Violation DoubledTransaction => new Violation("doubled-transaction");
+        public static string AccountAlreadyInitialized => new Violation("account-already-initialized").Value;
+        public static string AccountNotInitialized => new Violation("account-not-initialized").Value;
+        public static string CardNotActive => new Violation("card-not-active").Value;
+        public static string InsuficientLimit => new Violation("insuficient-limit").Value;
+        public static string HighFrequencySmallInterval => new Violation("high-frequency-small-interval").Value;
+        public static string DoubledTransaction => new Violation("doubled-transaction").Value;
     }
 }

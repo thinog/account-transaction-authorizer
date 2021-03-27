@@ -6,6 +6,7 @@ using TransactionAuthorizer.Domain.Interfaces.Repositories;
 using System;
 using TransactionAuthorizer.Application.UseCases.AuthorizeTransaction;
 using TransactionAuthorizer.Application.UseCases.CreateAccount;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace TransactionAuthorizer.Infrastructure.IoC
 {
@@ -21,10 +22,17 @@ namespace TransactionAuthorizer.Infrastructure.IoC
 
         private static IServiceCollection Configure(IServiceCollection serviceCollection)
         {
-            serviceCollection.AddDbContext<TransactionAuthorizerContext>(options => options.UseInMemoryDatabase("TransactionAuthorizer"));
+            var inMemoryDatabaseRoot = new InMemoryDatabaseRoot();
+
+            serviceCollection
+                .AddEntityFrameworkInMemoryDatabase()
+                .AddDbContext<TransactionAuthorizerContext>(options => options.UseInMemoryDatabase("TransactionAuthorizer", inMemoryDatabaseRoot), ServiceLifetime.Singleton, ServiceLifetime.Singleton);
+
+            serviceCollection.AddScoped<DbContext, TransactionAuthorizerContext>();
 
             serviceCollection.AddScoped<ITransactionRepository, TransactionRepository>();
             serviceCollection.AddScoped<IAccountRepository, AccountRepository>();
+            serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
 
             serviceCollection.AddScoped<AuthorizeTransactionUseCase>();
             serviceCollection.AddScoped<CreateAccountUseCase>();

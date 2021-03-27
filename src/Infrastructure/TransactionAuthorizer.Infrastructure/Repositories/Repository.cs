@@ -25,16 +25,14 @@ namespace TransactionAuthorizer.Infrastructure.Repositories
             return _dbSet.Where(where);
         }
 
-        public bool Insert(TEntity entity)
+        public void Insert(TEntity entity)
         {
             _dbSet.Add(entity);
-            return _context.SaveChanges() > 0;
         }
 
-        public bool Update(TEntity entity)
+        public void Update(TEntity entity)
         {
             _dbSet.Update(entity);
-            return _context.SaveChanges() > 0;
         }
     }
 }

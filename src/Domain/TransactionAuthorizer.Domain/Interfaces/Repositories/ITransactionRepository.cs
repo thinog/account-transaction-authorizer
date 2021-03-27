@@ -5,6 +5,6 @@ namespace TransactionAuthorizer.Domain.Interfaces.Repositories
 {
     public interface ITransactionRepository : IRepository<Transaction>
     {
-        IEnumerable<Transaction> GetTransactionsByTime(int minutes);
+        IEnumerable<Transaction> GetLastTransactionsByTime(int minutes);
     }
 }

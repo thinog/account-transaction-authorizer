@@ -8,7 +8,7 @@ namespace TransactionAuthorizer.Domain.Interfaces.Repositories
     public interface IRepository<TEntity> where TEntity : IEntity
     {
         IEnumerable<TEntity> GetByExpression(Expression<Func<TEntity, bool>> where);
-        bool Insert(TEntity entity);
-        bool Update(TEntity entity);
+        void Insert(TEntity entity);
+        void Update(TEntity entity);
     }
 }

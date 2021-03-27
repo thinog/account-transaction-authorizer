@@ -1,6 +1,5 @@
 using TransactionAuthorizer.Domain.Attributes;
 using TransactionAuthorizer.Domain.Interfaces.UseCases;
-using Newtonsoft.Json;
 using TransactionAuthorizer.Domain.Interfaces.Repositories;
 using TransactionAuthorizer.Application.Models;
 
@@ -10,11 +9,15 @@ namespace TransactionAuthorizer.Application.UseCases.CreateAccount
     public class CreateAccountUseCase : IUseCase
     {
         private ICreateAccountOutput _outputPort;
-        private IAccountRepository _accountRepository;
+        private IUnitOfWork _unitOfWork;
+        private IAccountRepository _accountRepository;        
 
-        public CreateAccountUseCase(IAccountRepository accountRepository)
+        public CreateAccountUseCase(
+            IUnitOfWork unitOfWork,
+            IAccountRepository accountRepository)
         {
             _outputPort = new CreateAccountDefaultOutput();
+            _unitOfWork = unitOfWork;
             _accountRepository = accountRepository;
         }
 
@@ -23,27 +26,25 @@ namespace TransactionAuthorizer.Application.UseCases.CreateAccount
             _outputPort = (ICreateAccountOutput)output;
         }
 
-        public void Execute(IInputPort input)
+        public IOutputPort Execute(IInputPort input)
         {
             var inputPort = (CreateAccountInput)input;
-
             var account = _accountRepository.GetAccount();
 
-            if(account is not null)
+            bool valid = CreateAccountValidator.Validate(_outputPort, account);
+
+            if(!valid)
             {
-                _outputPort.Ok(new AccountDetailsModel(account));
-                _outputPort.AccountAlreadyInitialized();
-                return;
+                _outputPort.Fill(new AccountDetailsModel(account));
             }
-
-            _accountRepository.Insert(inputPort.ToAccountEntity());
-
-            _outputPort.Ok(inputPort.Account);
-        }
-
-        public override string ToString()
-        {
-            return JsonConvert.SerializeObject(_outputPort.Account);
+            else
+            {
+                _accountRepository.Insert(inputPort.ToAccountEntity());
+                _unitOfWork.Save();
+                _outputPort.Fill(inputPort.Account);
+            }
+            
+            return _outputPort;
         }
     }
 }

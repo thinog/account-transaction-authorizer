@@ -1,6 +1,8 @@
 using System.Linq;
+using Newtonsoft.Json;
 using TransactionAuthorizer.Application.Enums;
 using TransactionAuthorizer.Application.Models;
+using TransactionAuthorizer.Domain.Utils;
 
 namespace TransactionAuthorizer.Application.UseCases.AuthorizeTransaction
 {
@@ -21,27 +23,32 @@ namespace TransactionAuthorizer.Application.UseCases.AuthorizeTransaction
 
         public void AccountNotInitialized()
         {
-            Account.Violations.Add(Violation.AccountNotInitialized.Value);
+            Account.Violations.AddIfNotExists(Violation.AccountNotInitialized);
         }
 
         public void CardNotActive()
         {
-            Account.Violations.Add(Violation.CardNotActive.Value);
+            Account.Violations.AddIfNotExists(Violation.CardNotActive);
         }
 
         public void DoubledTransaction()
         {
-            Account.Violations.Add(Violation.DoubledTransaction.Value);
+            Account.Violations.AddIfNotExists(Violation.DoubledTransaction);
         }
 
         public void HighFrequencySmallInterval()
         {
-            Account.Violations.Add(Violation.HighFrequencySmallInterval.Value);
+            Account.Violations.AddIfNotExists(Violation.HighFrequencySmallInterval);
         }
 
         public void InsufficientLimit()
         {
-            Account.Violations.Add(Violation.InsuficientLimit.Value);
+            Account.Violations.AddIfNotExists(Violation.InsuficientLimit);
+        }        
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(Account);
         }
     }
 }

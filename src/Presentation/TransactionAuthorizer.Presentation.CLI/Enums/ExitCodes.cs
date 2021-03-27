@@ -1,4 +1,4 @@
-namespace TransactionAuthorizer.Presentation.CLI
+namespace TransactionAuthorizer.Presentation.CLI.Enums
 {
     internal enum ExitCodes
     {

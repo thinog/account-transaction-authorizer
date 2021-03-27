@@ -10,7 +10,7 @@ namespace TransactionAuthorizer.Infrastructure.Repositories
     {
         public TransactionRepository(TransactionAuthorizerContext context) : base(context) { }
 
-        public IEnumerable<Transaction> GetTransactionsByTime(int minutes)
+        public IEnumerable<Transaction> GetLastTransactionsByTime(int minutes)
         {
             return GetByExpression(t => t.Time >= DateTime.Now.AddMinutes(-minutes));
         }

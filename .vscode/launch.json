@@ -11,7 +11,7 @@
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/src/Presentation/TransactionAuthorizer.Presentation.CLI/bin/Debug/net5.0/TransactionAuthorizer.Presentation.CLI.dll",
-            "args": [],
+            "args": ["<", "${workspaceFolder}/examples/account_already_exists.txt"],
             "cwd": "${workspaceFolder}/src/Presentation/TransactionAuthorizer.Presentation.CLI",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",

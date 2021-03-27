@@ -1,4 +1,5 @@
 using System;
+using Newtonsoft.Json;
 using TransactionAuthorizer.Application.Factories;
 using TransactionAuthorizer.Application.UseCases.AuthorizeTransaction;
 using TransactionAuthorizer.Application.UseCases.CreateAccount;
@@ -27,8 +28,8 @@ namespace TransactionAuthorizer.UnitTests.Application.Factories
             var result = UseCaseFactory.CreateUseCase(json, _serviceProvider);
 
             // Assert
-            Assert.IsType<CreateAccountUseCase>(result.UseCase);
-            Assert.IsType<CreateAccountInput>(result.InputPort);
+            Assert.IsType<CreateAccountUseCase>(result);
+            // Assert.IsType<CreateAccountInput>(result.InputPort);
         }
 
         [Fact]
@@ -41,8 +42,8 @@ namespace TransactionAuthorizer.UnitTests.Application.Factories
             var result = UseCaseFactory.CreateUseCase(json, _serviceProvider);
 
             // Assert
-            Assert.IsType<AuthorizeTransactionUseCase>(result.UseCase);
-            Assert.IsType<AuthorizeTransactionInput>(result.InputPort);
+            Assert.IsType<AuthorizeTransactionUseCase>(result);
+            // Assert.IsType<AuthorizeTransactionInput>(result.InputPort);
         }
 
         [Fact]
@@ -55,8 +56,8 @@ namespace TransactionAuthorizer.UnitTests.Application.Factories
             var result = UseCaseFactory.CreateUseCase(json, _serviceProvider);
 
             // Assert
-            Assert.Null(result.UseCase);
-            Assert.Null(result.InputPort);
+            Assert.Null(result);
+            // Assert.Null(result.InputPort);
         }
 
         [Fact]
@@ -64,13 +65,13 @@ namespace TransactionAuthorizer.UnitTests.Application.Factories
         {
             // Arrange
             string json = "{\"transaction\": {\"merchant\":";
+            string expectedError = "Invalid JSON format!";
             
             // Act
-            var result = UseCaseFactory.CreateUseCase(json,_serviceProvider);
+            var result = Assert.Throws<JsonReaderException>(() => UseCaseFactory.CreateUseCase(json,_serviceProvider));
 
             // Assert
-            Assert.Null(result.UseCase);
-            Assert.Null(result.InputPort);
+            Assert.Equal(expectedError, result.Message);
         }
     }
 }

@@ -2,50 +2,60 @@
 using Newtonsoft.Json;
 using TransactionAuthorizer.Application.Factories;
 using TransactionAuthorizer.Infrastructure.IoC;
+using TransactionAuthorizer.Presentation.CLI.Enums;
+using TransactionAuthorizer.Presentation.CLI.Streams;
 
 namespace TransactionAuthorizer.Presentation.CLI
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            if(Console.IsInputRedirected)
-            {                
-                // int i = 1;
-                string input;
+            var reader = new InputReader();
+            var writer = new OutputWriter();
 
-                try
-                {
-                    var serviceProvider = DependencyResolver.Resolve();
-
-                    while((input = Console.ReadLine()) != null)
-                    {
-                        // Console.WriteLine($"Input {i++}: {input}");
-                        var useCase = UseCaseFactory.CreateUseCase(input, serviceProvider);                    
-                        useCase.UseCase.Execute(useCase.InputPort);
-                        var output = useCase.UseCase.ToString();
-                        Console.WriteLine(output);
-                        // Console.WriteLine($"Output {i++}: {output}");
-                    }
-                }
-                catch(JsonReaderException exception)
-                {
-                    Console.WriteLine($"Error: {exception.Message}");
-                    Environment.Exit((int)ExitCodes.Error);
-                }
-            } 
-            else 
+            if (reader.HasInput())
             {
-                MissingInput();
+                var serviceProvider = DependencyResolver.Resolve();
+                Process(serviceProvider, reader, writer);
+            }
+            else
+            {
+                writer.WriteLine("Missing input!");
+                writer.WriteLine("USAGE: $ authorize < operations_file");
             }
 
             Environment.Exit((int)ExitCodes.Ok);
         }
 
-        private static void MissingInput()
+        public static void Process(IServiceProvider serviceProvider, InputReader reader, OutputWriter writer)
         {
-            Console.WriteLine("Missing input!");
-            Console.WriteLine("USAGE: $ authorize < operations_file");
+            string input;
+
+            while ((input = reader.ReadLine()) != null)
+            {
+                try
+                {
+                    var useCase = UseCaseFactory.CreateUseCase(input, serviceProvider);
+                    var inputPort = UseCaseFactory.CreateInputPort(input, useCase);
+                    var output = useCase.Execute(inputPort);
+
+                    writer.WriteLine(output);
+                }
+                catch (JsonReaderException exception)
+                {
+                    writer.WriteLine($"Error: {exception.Message}");
+                    Environment.Exit((int)ExitCodes.Error);
+                }
+                // catch (Exception ex)
+                catch (Exception)
+                {
+                    writer.WriteLine($"An error has occurred!");
+                    // writer.WriteLine(ex.Message);
+                    // writer.WriteLine(ex.StackTrace);
+                    Environment.Exit((int)ExitCodes.Error);
+                }
+            }
         }
     }
 }

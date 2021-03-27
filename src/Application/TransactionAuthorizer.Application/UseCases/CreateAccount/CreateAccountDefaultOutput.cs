@@ -1,6 +1,8 @@
 using System.Linq;
+using Newtonsoft.Json;
 using TransactionAuthorizer.Application.Enums;
 using TransactionAuthorizer.Application.Models;
+using TransactionAuthorizer.Domain.Utils;
 
 namespace TransactionAuthorizer.Application.UseCases.CreateAccount
 {
@@ -17,12 +19,17 @@ namespace TransactionAuthorizer.Application.UseCases.CreateAccount
 
         public void AccountAlreadyInitialized()
         {
-            Account.Violations.Add(Violation.AccountAlreadyInitialized.Value);
+            Account.Violations.AddIfNotExists(Violation.AccountAlreadyInitialized);
         }
 
-        public void Ok(AccountDetailsModel accountDetails)
+        public void Fill(AccountDetailsModel accountDetails)
         {
             Account.AccountDetails = accountDetails;
+        }
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(Account);
         }
     }
 }

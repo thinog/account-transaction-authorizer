@@ -11,16 +11,16 @@ namespace TransactionAuthorizer.Application.Factories
 {
     public static class UseCaseFactory
     {
-        #pragma warning disable 0618 // disables warning of "obsolete method"
-        public static (IUseCase UseCase, IInputPort InputPort) CreateUseCase(string json, IServiceProvider serviceProvider)
+        #pragma warning disable 0618 // disable "obsolete method" warning caused by JsonSchemaGenerator
+        public static IUseCase CreateUseCase(string json, IServiceProvider serviceProvider)
         {
             try
             {
-                var useCases = GetAllUseCases();
+                var useCaseTypes = GetAllUseCaseTypes();
 
-                foreach(var useCase in useCases)
+                foreach(var useCaseType in useCaseTypes)
                 {
-                    var handledObject = (HandledObjectAttribute)useCase.GetCustomAttributes(typeof(HandledObjectAttribute), false).FirstOrDefault();
+                    var handledObject = GetHandledObjectAttribute(useCaseType);
 
                     if(handledObject is not null)
                     {
@@ -29,24 +29,39 @@ namespace TransactionAuthorizer.Application.Factories
 
                         bool valid = jObject.IsValid(jSchema);
 
-                        if(valid)
-                        {
-                            var inputPort = JsonConvert.DeserializeObject(json, handledObject.ObjectType);
-                            return ((IUseCase)serviceProvider.GetService(useCase), (IInputPort)inputPort);
-                        }
+                        if(valid)                            
+                            return (IUseCase)serviceProvider.GetService(useCaseType);
                     }
                 }
 
-                return (null, null);
+                return null;
             }
             catch (JsonReaderException)
             {
                 throw new JsonReaderException("Invalid JSON format!");
             }
         }
-        #pragma warning restore 0618 // enables warning of "obsolete method"
+        #pragma warning restore 0618 // restore "obsolete method" warning caused by JsonSchemaGenerator
 
-        private static IEnumerable<Type> GetAllUseCases()
+        public static IInputPort CreateInputPort(string inputJson, IUseCase useCase)
+        {
+            try
+            {
+                var handledObject = GetHandledObjectAttribute(useCase.GetType());
+                return (IInputPort)JsonConvert.DeserializeObject(inputJson, handledObject.ObjectType);
+            }
+            catch (JsonReaderException)
+            {
+                throw new JsonReaderException("Invalid JSON format!");
+            }
+        }
+
+        private static HandledObjectAttribute GetHandledObjectAttribute(Type type)
+        {
+            return (HandledObjectAttribute)type.GetCustomAttributes(typeof(HandledObjectAttribute), false).FirstOrDefault();
+        }
+
+        private static IEnumerable<Type> GetAllUseCaseTypes()
         {
             var useCaseInterface = typeof(IUseCase);
 

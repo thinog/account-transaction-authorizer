@@ -16,11 +16,6 @@ namespace TransactionAuthorizer.Infrastructure.Repositories.Context
             modelBuilder.Entity<Account>()
                 .Property(a => a.Id)
                 .ValueGeneratedOnAdd();
-
-            modelBuilder.Entity<Account>()
-                .HasMany(a => a.Transactions)
-                .WithOne()
-                .HasForeignKey(t => t.Id);
             #endregion
 
             #region Transaction
@@ -30,10 +25,6 @@ namespace TransactionAuthorizer.Infrastructure.Repositories.Context
             modelBuilder.Entity<Transaction>()
                 .Property(t => t.Id)
                 .ValueGeneratedOnAdd();
-
-            modelBuilder.Entity<Transaction>()
-                .HasOne(t => t.Account)
-                .WithMany();
             #endregion
         }
     }

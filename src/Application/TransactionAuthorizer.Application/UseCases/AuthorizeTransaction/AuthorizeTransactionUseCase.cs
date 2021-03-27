@@ -11,14 +11,17 @@ namespace TransactionAuthorizer.Application.UseCases.AuthorizeTransaction
     public class AuthorizeTransactionUseCase : IUseCase
     {
         private IAuthorizeTransactionOutput _outputPort;
+        private IUnitOfWork _unitOfWork;
         private IAccountRepository _accountRepository;
         private ITransactionRepository _transactionRepository;
 
         public AuthorizeTransactionUseCase(
+            IUnitOfWork unitOfWork,
             IAccountRepository accountRepository,
             ITransactionRepository transactionRepository)
         {
             _outputPort = new AuthorizeTransactionDefaultOutput();
+            _unitOfWork = unitOfWork;
             _accountRepository = accountRepository;
             _transactionRepository = transactionRepository;
         }
@@ -28,46 +31,28 @@ namespace TransactionAuthorizer.Application.UseCases.AuthorizeTransaction
             _outputPort = (IAuthorizeTransactionOutput)output;
         }
 
-        public void Execute(IInputPort input)
+        public IOutputPort Execute(IInputPort input)
         {
             var inputPort = (AuthorizeTransactionInput)input;
-
             var account = _accountRepository.GetAccount();
-
-            if(account is null)
-                _outputPort.AccountNotInitialized();
-
-            if(!account.Active)
-                _outputPort.CardNotActive();
-
-            if((account.Limit - inputPort.Transaction.Amount) < 0)
-                _outputPort.InsufficientLimit();
-
-            var transactions = _transactionRepository.GetTransactionsByTime(2);
             
-            if(transactions is not null)
-            {
-                if(transactions.Count() >= 3)
-                    _outputPort.HighFrequencySmallInterval();
+            if(account is not null)
+                account.Transactions = _transactionRepository.GetLastTransactionsByTime(2);
 
-                if(transactions.GroupBy(t => new { t.Merchant, t.Value }).Any(tg => tg.Count() >= 2))
-                    _outputPort.DoubledTransaction();
-            }
+            bool valid = AuthorizeTransactionValidator.Validate(_outputPort, inputPort, account);
 
-            if(!_outputPort.HasErrors)
+            if(valid)
             {
                 account.Limit -= inputPort.Transaction.Amount;
                 
                 _transactionRepository.Insert(inputPort.ToTransactionEntity());
                 _accountRepository.Update(account);
+                _unitOfWork.Save();
             }                        
 
             _outputPort.Ok(new AccountDetailsModel(account));
-        }
 
-        public override string ToString()
-        {
-            return JsonConvert.SerializeObject(_outputPort.Account);
+            return _outputPort;
         }
     }
 }

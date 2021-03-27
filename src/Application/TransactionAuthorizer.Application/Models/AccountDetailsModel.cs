@@ -15,8 +15,8 @@ namespace TransactionAuthorizer.Application.Models
 
         public AccountDetailsModel(Account account)
         {
-            ActiveCard = account.Active;
-            AvailableLimit = account.Limit;
+            ActiveCard = account?.Active ?? false;
+            AvailableLimit = account?.Limit ?? 0;
         }
     }
 }
