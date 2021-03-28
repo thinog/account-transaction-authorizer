@@ -11,6 +11,8 @@ namespace TransactionAuthorizer.Application.UseCases.CreateAccount
         [JsonRequired]
         public AccountDetailsModel Account { get; set; }
 
+        public CreateAccountInput() { }
+
         public CreateAccountInput(Account account)
         {
             Account = new AccountDetailsModel(account);

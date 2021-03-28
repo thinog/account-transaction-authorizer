@@ -11,6 +11,8 @@ namespace TransactionAuthorizer.Application.UseCases.AuthorizeTransaction
         [JsonRequired]
         public TransactionDetailsModel Transaction { get; set; }
 
+        public AuthorizeTransactionInput() { }
+        
         public AuthorizeTransactionInput(Transaction transaction)
         {
             Transaction = new TransactionDetailsModel(transaction);

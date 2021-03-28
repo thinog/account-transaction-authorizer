@@ -20,9 +20,9 @@ namespace TransactionAuthorizer.Application.Models
 
         public TransactionDetailsModel(Transaction transaction)
         {
-            Merchant = transaction.Merchant;
-            Amount = transaction.Value;
-            Time = transaction.Time;
+            Merchant = transaction?.Merchant;
+            Amount = transaction?.Value ?? 0;
+            Time = transaction?.Time ?? DateTime.MinValue;
         }
     }
 }

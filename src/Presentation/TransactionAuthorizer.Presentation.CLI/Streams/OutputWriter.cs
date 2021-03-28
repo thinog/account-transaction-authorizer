@@ -8,7 +8,7 @@ namespace TransactionAuthorizer.Presentation.CLI.Streams
         private TextWriter _defaultWriter;
 
         public OutputWriter()
-        {            
+        {
             _defaultWriter = Console.Out;
         }
 
@@ -26,6 +26,12 @@ namespace TransactionAuthorizer.Presentation.CLI.Streams
         public void WriteLine(object value)
         {
             Console.WriteLine(value);
+        }
+
+        public void WriteDebug(object value)
+        {
+            if (Environment.GetEnvironmentVariable("DEBUG") == Boolean.TrueString)
+                Console.WriteLine(value);
         }
 
         public void Dispose()

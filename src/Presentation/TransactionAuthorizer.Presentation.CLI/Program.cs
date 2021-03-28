@@ -1,4 +1,5 @@
 ﻿using System;
+using Mono.Options;
 using Newtonsoft.Json;
 using TransactionAuthorizer.Application.Factories;
 using TransactionAuthorizer.Infrastructure.IoC;
@@ -14,18 +15,32 @@ namespace TransactionAuthorizer.Presentation.CLI
             var reader = new InputReader();
             var writer = new OutputWriter();
 
-            if (reader.HasInput())
+            try
             {
-                var serviceProvider = DependencyResolver.Resolve();
-                Process(serviceProvider, reader, writer);
-            }
-            else
-            {
-                writer.WriteLine("Missing input!");
-                writer.WriteLine("USAGE: $ authorize < operations_file");
-            }
+                HandleArguments(args);
 
-            Environment.Exit((int)ExitCodes.Ok);
+                if (reader.HasInput())
+                {
+                    var serviceProvider = DependencyResolver.Resolve();
+                    serviceProvider = null;
+                    Process(serviceProvider, reader, writer);
+                }
+                else
+                {
+                    writer.WriteLine("Missing input!");
+                    writer.WriteLine("USAGE: $ authorize < operations_file");
+                }
+
+                Environment.Exit((int)ExitCodes.Ok);
+            }
+            catch (Exception exception)
+            {
+                writer.WriteLine($"An error has occurred!");
+                writer.WriteDebug(exception.Message);
+                writer.WriteDebug(exception.StackTrace);
+
+                Environment.Exit((int)ExitCodes.Error);
+            }
         }
 
         public static void Process(IServiceProvider serviceProvider, InputReader reader, OutputWriter writer)
@@ -45,17 +60,18 @@ namespace TransactionAuthorizer.Presentation.CLI
                 catch (JsonReaderException exception)
                 {
                     writer.WriteLine($"Error: {exception.Message}");
-                    Environment.Exit((int)ExitCodes.Error);
-                }
-                // catch (Exception ex)
-                catch (Exception)
-                {
-                    writer.WriteLine($"An error has occurred!");
-                    // writer.WriteLine(ex.Message);
-                    // writer.WriteLine(ex.StackTrace);
-                    Environment.Exit((int)ExitCodes.Error);
                 }
             }
+        }
+
+        public static void HandleArguments(string[] args)
+        {
+            var options = new OptionSet
+            {
+                { "verbose|v", "increases verbosity", verbose => Environment.SetEnvironmentVariable("DEBUG", Boolean.TrueString) }
+            };
+
+            options.Parse(args);
         }
     }
 }
