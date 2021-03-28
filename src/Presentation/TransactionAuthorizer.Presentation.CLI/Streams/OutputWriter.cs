@@ -18,11 +18,6 @@ namespace TransactionAuthorizer.Presentation.CLI.Streams
             Console.SetOut(writer);
         }
 
-        public void Write(object value)
-        {
-            Console.Write(value);
-        }
-
         public void WriteLine(object value)
         {
             Console.WriteLine(value);

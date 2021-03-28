@@ -6,27 +6,29 @@ using TransactionAuthorizer.Domain.Interfaces.Repositories;
 using System;
 using TransactionAuthorizer.Application.UseCases.AuthorizeTransaction;
 using TransactionAuthorizer.Application.UseCases.CreateAccount;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace TransactionAuthorizer.Infrastructure.IoC
 {
     public class DependencyResolver
     {
-        public static IServiceProvider Resolve()
+        public static IServiceProvider Resolve(IResolverConfiguration configuration = null)
         {
             IServiceCollection serviceCollection = new ServiceCollection();
 
-            return Configure(serviceCollection)
+            return Configure(serviceCollection, configuration)
                 .BuildServiceProvider();
         }
 
-        private static IServiceCollection Configure(IServiceCollection serviceCollection)
+        private static IServiceCollection Configure(IServiceCollection serviceCollection, IResolverConfiguration configuration)
         {
-            serviceCollection.AddDbContext<TransactionAuthorizerContext>(options => options.UseInMemoryDatabase("TransactionAuthorizer"));
+            if(configuration is not null && configuration.IsTest)
+                serviceCollection.AddDbContext<TransactionAuthorizerContext>(options => options.UseInMemoryDatabase("TestTransactionAuthorizer"));
+            else
+                serviceCollection.AddDbContext<TransactionAuthorizerContext>(options => options.UseInMemoryDatabase("TransactionAuthorizer"));
 
-            serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
-            serviceCollection.AddScoped<ITransactionRepository, TransactionRepository>();
-            serviceCollection.AddScoped<IAccountRepository, AccountRepository>();
+            serviceCollection.AddScoped(typeof(IUnitOfWork), configuration?.UnitOfWork ?? typeof(UnitOfWork));
+            serviceCollection.AddScoped(typeof(ITransactionRepository), configuration?.TransactionRepository ?? typeof(TransactionRepository));
+            serviceCollection.AddScoped(typeof(IAccountRepository), configuration?.AccountRepository ?? typeof(AccountRepository));
 
             serviceCollection.AddScoped<AuthorizeTransactionUseCase>();
             serviceCollection.AddScoped<CreateAccountUseCase>();

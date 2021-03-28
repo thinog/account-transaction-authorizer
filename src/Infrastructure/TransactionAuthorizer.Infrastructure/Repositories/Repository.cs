@@ -20,11 +20,6 @@ namespace TransactionAuthorizer.Infrastructure.Repositories
             _dbSet = _context.Set<TEntity>();
         }
 
-        public IEnumerable<TEntity> GetByExpression(Expression<Func<TEntity, bool>> where)
-        {
-            return _dbSet.Where(where);
-        }
-
         public void Insert(TEntity entity)
         {
             _dbSet.Add(entity);
