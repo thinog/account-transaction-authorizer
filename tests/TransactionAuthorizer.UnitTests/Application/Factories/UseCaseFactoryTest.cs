@@ -45,7 +45,7 @@ namespace TransactionAuthorizer.UnitTests.Application.Factories
         }
 
         [Fact]
-        public void Should_ReturnNull_When_ReceiveAnUnexpectedJson()
+        public void Should_ReturnNullUseCase_When_ReceiveAnUnexpectedJson()
         {
             // Arrange
             string json = "{\"close-account\": {\"account-number\": 123}}";
@@ -58,7 +58,7 @@ namespace TransactionAuthorizer.UnitTests.Application.Factories
         }
 
         [Fact]
-        public void Should_ReturnNull_When_ReceiveAnInvalidJson()
+        public void Should_ReturnNullUseCase_When_ReceiveAnInvalidJson()
         {
             // Arrange
             string json = "{\"transaction\": {\"merchant\":";
@@ -66,6 +66,33 @@ namespace TransactionAuthorizer.UnitTests.Application.Factories
             
             // Act
             var result = Assert.Throws<JsonReaderException>(() => UseCaseFactory.CreateUseCase(json,_serviceProvider));
+
+            // Assert
+            Assert.Equal(expectedError, result.Message);
+        }
+
+        [Fact]
+        public void Should_ReturnAnCreateAccountInputInstance_When_ReceiveAValidJson()
+        {
+            // Arrange
+            string json = "{\"account\": {\"active-card\": true, \"available-limit\": 100}}";
+            
+            // Act
+            var result = UseCaseFactory.CreateInputPort(json, new CreateAccountUseCase(null, null));
+
+            // Assert
+            Assert.IsType<CreateAccountInput>(result);
+        }
+
+        [Fact]
+        public void Should_ReturnAnError_When_ReceiveAJsonWithExtraProperties()
+        {
+            // Arrange
+            string json = "{\"transaction\": {\"merchant\": \"Habbib's\", \"amount\": 90, \"time\":\"2019-02-13T11:00:00.000Z\", \"virtual-card\": true}}";
+            string expectedError = "Unknown properties detected!";
+            
+            // Act
+            var result = Assert.Throws<JsonReaderException>(() => UseCaseFactory.CreateInputPort(json, new CreateAccountUseCase(null, null)));
 
             // Assert
             Assert.Equal(expectedError, result.Message);

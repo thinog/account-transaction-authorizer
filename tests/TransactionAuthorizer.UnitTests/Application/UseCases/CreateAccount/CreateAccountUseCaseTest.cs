@@ -1,6 +1,6 @@
 using Xunit;
 
-namespace TransactionAuthorizer.UnitTests.Application
+namespace TransactionAuthorizer.UnitTests.Application.UseCases.CreateAccount
 {
     public class CreateAccountUseCaseTest
     {

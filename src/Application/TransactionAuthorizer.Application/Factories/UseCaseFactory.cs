@@ -56,10 +56,6 @@ namespace TransactionAuthorizer.Application.Factories
 
                 return (IInputPort)JsonConvert.DeserializeObject(inputJson, handledObject.ObjectType, settings);
             }
-            catch (JsonReaderException)
-            {
-                throw new JsonReaderException("Invalid JSON format!");
-            }
             catch (JsonSerializationException)
             {
                 throw new JsonReaderException("Unknown properties detected!");

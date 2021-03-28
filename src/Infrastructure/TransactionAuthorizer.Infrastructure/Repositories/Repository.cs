@@ -29,10 +29,5 @@ namespace TransactionAuthorizer.Infrastructure.Repositories
         {
             _dbSet.Add(entity);
         }
-
-        public void Update(TEntity entity)
-        {
-            _dbSet.Update(entity);
-        }
     }
 }

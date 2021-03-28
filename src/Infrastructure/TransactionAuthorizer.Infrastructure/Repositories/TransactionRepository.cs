@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TransactionAuthorizer.Domain.Entities;
 using TransactionAuthorizer.Domain.Interfaces.Repositories;
 using TransactionAuthorizer.Infrastructure.Repositories.Context;
@@ -10,9 +11,9 @@ namespace TransactionAuthorizer.Infrastructure.Repositories
     {
         public TransactionRepository(TransactionAuthorizerContext context) : base(context) { }
 
-        public IEnumerable<Transaction> GetLastTransactionsByTime(int minutes)
+        public IEnumerable<Transaction> GetTransactionsByTime(DateTime time)
         {
-            return GetByExpression(t => t.Time >= DateTime.Now.AddMinutes(-minutes));
+            return _dbSet.Where(t => t.Time >= time);
         }
     }
 }

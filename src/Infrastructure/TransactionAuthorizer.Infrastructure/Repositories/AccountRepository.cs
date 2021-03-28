@@ -13,5 +13,10 @@ namespace TransactionAuthorizer.Infrastructure.Repositories
         {
             return _dbSet.FirstOrDefault();
         }
+
+        public void Update(Account account)
+        {
+            _dbSet.Update(account);
+        }
     }
 }

@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using TransactionAuthorizer.Domain.Interfaces.Repositories;
 using TransactionAuthorizer.Application.Models;
 using System.Linq;
+using System;
 
 namespace TransactionAuthorizer.Application.UseCases.AuthorizeTransaction
 {
@@ -37,7 +38,10 @@ namespace TransactionAuthorizer.Application.UseCases.AuthorizeTransaction
             var account = _accountRepository.GetAccount();
             
             if(account is not null)
-                account.Transactions = _transactionRepository.GetLastTransactionsByTime(2);
+            {
+                var transactionsDate = DateTime.Now.AddMinutes(-2);
+                account.Transactions = _transactionRepository.GetTransactionsByTime(transactionsDate);
+            }
 
             bool valid = AuthorizeTransactionValidator.Validate(_outputPort, inputPort, account);
 
