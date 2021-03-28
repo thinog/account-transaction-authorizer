@@ -48,11 +48,21 @@ namespace TransactionAuthorizer.Application.Factories
             try
             {
                 var handledObject = GetHandledObjectAttribute(useCase.GetType());
-                return (IInputPort)JsonConvert.DeserializeObject(inputJson, handledObject.ObjectType);
+
+                var settings = new JsonSerializerSettings
+                {
+                    MissingMemberHandling = MissingMemberHandling.Error,                    
+                };
+
+                return (IInputPort)JsonConvert.DeserializeObject(inputJson, handledObject.ObjectType, settings);
             }
             catch (JsonReaderException)
             {
                 throw new JsonReaderException("Invalid JSON format!");
+            }
+            catch (JsonSerializationException)
+            {
+                throw new JsonReaderException("Unknown properties detected!");
             }
         }
 

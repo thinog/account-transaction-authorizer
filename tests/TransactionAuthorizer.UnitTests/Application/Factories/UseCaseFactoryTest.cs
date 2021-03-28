@@ -29,7 +29,6 @@ namespace TransactionAuthorizer.UnitTests.Application.Factories
 
             // Assert
             Assert.IsType<CreateAccountUseCase>(result);
-            // Assert.IsType<CreateAccountInput>(result.InputPort);
         }
 
         [Fact]
@@ -43,7 +42,6 @@ namespace TransactionAuthorizer.UnitTests.Application.Factories
 
             // Assert
             Assert.IsType<AuthorizeTransactionUseCase>(result);
-            // Assert.IsType<AuthorizeTransactionInput>(result.InputPort);
         }
 
         [Fact]
@@ -57,7 +55,6 @@ namespace TransactionAuthorizer.UnitTests.Application.Factories
 
             // Assert
             Assert.Null(result);
-            // Assert.Null(result.InputPort);
         }
 
         [Fact]

@@ -22,7 +22,6 @@ namespace TransactionAuthorizer.Presentation.CLI
                 if (reader.HasInput())
                 {
                     var serviceProvider = DependencyResolver.Resolve();
-                    serviceProvider = null;
                     Process(serviceProvider, reader, writer);
                 }
                 else
