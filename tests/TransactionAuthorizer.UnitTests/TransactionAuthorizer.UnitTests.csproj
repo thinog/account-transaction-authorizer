@@ -29,6 +29,7 @@
     <ProjectReference Include="..\..\src\Infrastructure\TransactionAuthorizer.Infrastructure\TransactionAuthorizer.Infrastructure.csproj" />
     <ProjectReference Include="..\..\src\Infrastructure\TransactionAuthorizer.Infrastructure.IoC\TransactionAuthorizer.Infrastructure.IoC.csproj" />
     <ProjectReference Include="..\..\src\Domain\TransactionAuthorizer.Domain\TransactionAuthorizer.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Presentation\TransactionAuthorizer.Presentation.CLI\TransactionAuthorizer.Presentation.CLI.csproj" />
   </ItemGroup>
 
 </Project>

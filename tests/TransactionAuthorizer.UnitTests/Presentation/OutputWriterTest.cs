@@ -1,8 +1,8 @@
 using Xunit;
 
-namespace TransactionAuthorizer.UnitTests.Infrastructure.IoC
+namespace TransactionAuthorizer.UnitTests.Presentation
 {
-    public class DependencyResolverTest
+    public class OutputWriterTest
     {
         [Fact]
         public void Should_Return()
