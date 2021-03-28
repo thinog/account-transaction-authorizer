@@ -5,7 +5,19 @@ namespace TransactionAuthorizer.UnitTests.Application.UseCases.CreateAccount
     public class CreateAccountUseCaseTest
     {
         [Fact]
-        public void Should_Return()
+        public void Should_CreateAccount_When_ReceiveAValidAccountAndAccountIsNotInitialized()
+        {
+            
+        }
+
+        [Fact]
+        public void Should_NotCreateAccount_When_ReceiveAValidAccountAndAccountIsInitialized()
+        {
+            
+        }
+
+        [Fact]
+        public void Should_CallCustomOutputPortMethods_When_OutputPortIsSet()
         {
             
         }

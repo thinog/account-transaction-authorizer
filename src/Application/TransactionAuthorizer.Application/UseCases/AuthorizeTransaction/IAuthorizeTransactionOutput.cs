@@ -7,7 +7,7 @@ namespace TransactionAuthorizer.Application.UseCases.AuthorizeTransaction
     {
         AccountModel Account { get; set; }
 
-        void Ok(AccountDetailsModel accountDetails);
+        void Fill(AccountDetailsModel accountDetails);
         void AccountNotInitialized();
         void CardNotActive();
         void InsufficientLimit();

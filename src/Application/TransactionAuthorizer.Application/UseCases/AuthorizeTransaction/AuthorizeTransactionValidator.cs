@@ -26,7 +26,7 @@ namespace TransactionAuthorizer.Application.UseCases.AuthorizeTransaction
                 if(account.Transactions.Count() >= 3)
                     output.HighFrequencySmallInterval();
 
-                if(account.Transactions.GroupBy(t => new { t.Merchant, t.Value }).Any(tg => tg.Count() >= 2))
+                if(account.Transactions.Any(t => t.Merchant == input.Transaction.Merchant && t.Value == input.Transaction.Amount))
                     output.DoubledTransaction();
             }
 

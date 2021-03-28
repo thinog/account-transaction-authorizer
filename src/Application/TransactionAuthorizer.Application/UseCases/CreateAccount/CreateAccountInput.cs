@@ -22,8 +22,8 @@ namespace TransactionAuthorizer.Application.UseCases.CreateAccount
         {
             return new Account
             {
-                Active = Account.ActiveCard,
-                Limit = Account.AvailableLimit
+                Active = Account?.ActiveCard ?? false,
+                Limit = Account?.AvailableLimit ?? 0
             };
         }
     }

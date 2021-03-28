@@ -67,7 +67,7 @@ namespace TransactionAuthorizer.Presentation.CLI
         {
             var options = new OptionSet
             {
-                { "verbose|v", "increases verbosity", verbose => Environment.SetEnvironmentVariable("DEBUG", Boolean.TrueString) }
+                { "verbose|v", "increases verbosity", verbose => Environment.SetEnvironmentVariable("VERBOSE", Boolean.TrueString) }
             };
 
             options.Parse(args);

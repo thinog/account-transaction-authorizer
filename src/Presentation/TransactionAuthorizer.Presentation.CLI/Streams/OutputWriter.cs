@@ -30,7 +30,7 @@ namespace TransactionAuthorizer.Presentation.CLI.Streams
 
         public void WriteDebug(object value)
         {
-            if (Environment.GetEnvironmentVariable("DEBUG") == Boolean.TrueString)
+            if (Environment.GetEnvironmentVariable("VERBOSE") == Boolean.TrueString)
                 Console.WriteLine(value);
         }
 

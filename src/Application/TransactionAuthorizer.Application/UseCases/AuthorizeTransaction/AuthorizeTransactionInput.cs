@@ -2,6 +2,7 @@ using TransactionAuthorizer.Domain.Interfaces.UseCases;
 using TransactionAuthorizer.Application.Models;
 using Newtonsoft.Json;
 using TransactionAuthorizer.Domain.Entities;
+using System;
 
 namespace TransactionAuthorizer.Application.UseCases.AuthorizeTransaction
 {
@@ -22,9 +23,9 @@ namespace TransactionAuthorizer.Application.UseCases.AuthorizeTransaction
         {
             return new Transaction
             {
-                Merchant = Transaction.Merchant,
-                Value = Transaction.Amount,
-                Time = Transaction.Time
+                Merchant = Transaction?.Merchant,
+                Value = Transaction?.Amount ?? 0,
+                Time = Transaction?.Time ?? DateTime.MinValue
             };
         }
     }

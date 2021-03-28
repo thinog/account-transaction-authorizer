@@ -16,7 +16,7 @@ namespace TransactionAuthorizer.Application.UseCases.AuthorizeTransaction
         public AccountModel Account { get; set; }
         public bool HasErrors => Account.Violations.Any();
 
-        public void Ok(AccountDetailsModel accountDetails)
+        public void Fill(AccountDetailsModel accountDetails)
         {
             Account.AccountDetails = accountDetails;
         }

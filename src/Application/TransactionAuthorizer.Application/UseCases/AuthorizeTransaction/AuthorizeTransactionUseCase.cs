@@ -54,7 +54,7 @@ namespace TransactionAuthorizer.Application.UseCases.AuthorizeTransaction
                 _unitOfWork.Save();
             }                        
 
-            _outputPort.Ok(new AccountDetailsModel(account));
+            _outputPort.Fill(new AccountDetailsModel(account));
 
             return _outputPort;
         }
