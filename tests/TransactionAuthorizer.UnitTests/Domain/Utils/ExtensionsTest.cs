@@ -25,7 +25,7 @@ namespace TransactionAuthorizer.UnitTests.Domain.Utils
         public void Should_AddTheItemInThePopulatedList_When_ReceiveAnItemThatNotExistsInTheList()
         {
             // Arrange
-            var list = new List<string> { "plataformtec", "easynvest" };
+            var list = new List<string> { "cognitect", "plataformtec", "easynvest" };
             string value = "nubank";
 
             // Act
@@ -33,7 +33,7 @@ namespace TransactionAuthorizer.UnitTests.Domain.Utils
 
             // Assert
             Assert.Contains(value, list);
-            Assert.True(list.Count == 3);
+            Assert.True(list.Count == 4);
         }
 
         [Fact]

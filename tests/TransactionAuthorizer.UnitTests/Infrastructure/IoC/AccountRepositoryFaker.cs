@@ -1,6 +1,5 @@
 using TransactionAuthorizer.Domain.Entities;
 using TransactionAuthorizer.Domain.Interfaces.Repositories;
-using Xunit;
 
 namespace TransactionAuthorizer.UnitTests.Infrastructure.IoC
 {
@@ -8,17 +7,17 @@ namespace TransactionAuthorizer.UnitTests.Infrastructure.IoC
     {
         public Account GetAccount()
         {
-            throw new System.NotImplementedException();
+            return new Account { Limit = 100, Active = true };
         }
 
         public void Insert(Account entity)
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public void Update(Account account)
         {
-            throw new System.NotImplementedException();
+            
         }
     }
 }

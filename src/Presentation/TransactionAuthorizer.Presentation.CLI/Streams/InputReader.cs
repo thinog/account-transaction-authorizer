@@ -18,12 +18,12 @@ namespace TransactionAuthorizer.Presentation.CLI.Streams
             Console.SetIn(reader);
         }
 
-        public bool HasInput()
+        public virtual bool HasInput()
         {
             return Console.IsInputRedirected;
         }
 
-        public string ReadLine()
+        public virtual string ReadLine()
         {
             return Console.ReadLine();
         }

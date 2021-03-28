@@ -7,7 +7,7 @@ namespace TransactionAuthorizer.UnitTests.Infrastructure.IoC
     {
         public int Save()
         {
-            throw new System.NotImplementedException();
+            return 0;
         }
     }
 }

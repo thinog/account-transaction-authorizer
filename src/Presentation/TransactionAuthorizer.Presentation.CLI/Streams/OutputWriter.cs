@@ -18,12 +18,12 @@ namespace TransactionAuthorizer.Presentation.CLI.Streams
             Console.SetOut(writer);
         }
 
-        public void WriteLine(object value)
+        public virtual void WriteLine(object value)
         {
             Console.WriteLine(value);
         }
 
-        public void WriteDebug(object value)
+        public virtual void WriteDebug(object value)
         {
             if (Environment.GetEnvironmentVariable("VERBOSE") == Boolean.TrueString)
                 Console.WriteLine(value);

@@ -13,10 +13,10 @@ namespace TransactionAuthorizer.UnitTests.Presentation
         {
             // Arrange
             var textWriterMock = new Mock<TextWriter>();
-            var reader = new OutputWriter(textWriterMock.Object);
+            var writer = new OutputWriter(textWriterMock.Object);
 
             // Act
-            reader.WriteLine("abc");
+            writer.WriteLine("abc");
 
             // Assert
             textWriterMock.Verify(tw => tw.WriteLine(It.IsAny<object>()));
@@ -27,11 +27,11 @@ namespace TransactionAuthorizer.UnitTests.Presentation
         {
             // Arrange
             var textWriterMock = new Mock<TextWriter>();
-            var reader = new OutputWriter(textWriterMock.Object);
+            var writer = new OutputWriter(textWriterMock.Object);
             Environment.SetEnvironmentVariable("VERBOSE", null);
 
             // Act
-            reader.WriteDebug("abc");
+            writer.WriteDebug("abc");
 
             // Assert
             textWriterMock.Verify(tw => tw.WriteLine(It.IsAny<object>()), Times.Never);
@@ -42,11 +42,11 @@ namespace TransactionAuthorizer.UnitTests.Presentation
         {
             // Arrange
             var textWriterMock = new Mock<TextWriter>();
-            var reader = new OutputWriter(textWriterMock.Object);
+            var writer = new OutputWriter(textWriterMock.Object);
             Environment.SetEnvironmentVariable("VERBOSE", Boolean.TrueString);
 
             // Act
-            reader.WriteDebug("abc");
+            writer.WriteDebug("abc");
 
             // Assert
             textWriterMock.Verify(tw => tw.WriteLine(It.IsAny<object>()));

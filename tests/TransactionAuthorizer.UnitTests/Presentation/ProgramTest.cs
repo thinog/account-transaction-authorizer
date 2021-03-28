@@ -1,5 +1,10 @@
 using System;
+using System.IO;
+using Moq;
+using TransactionAuthorizer.Infrastructure.IoC;
 using TransactionAuthorizer.Presentation.CLI;
+using TransactionAuthorizer.Presentation.CLI.Streams;
+using TransactionAuthorizer.UnitTests.Infrastructure.IoC;
 using Xunit;
 
 namespace TransactionAuthorizer.UnitTests.Presentation
@@ -35,29 +40,52 @@ namespace TransactionAuthorizer.UnitTests.Presentation
         }
 
         [Fact]
-        public void Should_NotCallMethods_When_HasNoLinesToRead()
+        public void Should_NotCallWriterMethods_When_HasNoLinesToRead()
         {
             // Arrange
+            var service = DependencyResolver.Resolve(new ResolverConfigurationFaker());
+
+            var outputMock = new Mock<OutputWriter>();
             
+            var inputMock = new Mock<InputReader>();
+            inputMock.Setup(r => r.ReadLine()).Returns((string)null);
 
             // Act
-            // Program.Process();
+            Program.Process(service, inputMock.Object, outputMock.Object);
 
             // Assert
-            
+            outputMock.Verify(tr => tr.WriteLine(It.IsAny<object>()), Times.Never);
+            inputMock.Verify(tr => tr.ReadLine());
         }
 
         [Fact]
-        public void Should_CallMethods_When_HasLinesToRead()
+        public void Should_CallWriterMethods_When_HasLinesToRead()
         {
             // Arrange
+            var json = "{\"account\": {\"active-card\": true, \"available-limit\": 100}}";
             
+            var resolverConfiguration = new ResolverConfigurationFaker
+            {
+                UnitOfWork = typeof(UnitOfWorkFaker),
+                AccountRepository = typeof(AccountRepositoryFaker)
+            };
+
+            var service = DependencyResolver.Resolve(resolverConfiguration);
+
+            var outputMock = new Mock<OutputWriter>();
+            
+            var inputMock = new Mock<InputReader>();
+            inputMock
+                .SetupSequence(r => r.ReadLine())
+                .Returns(json)
+                .Returns((string)null);
 
             // Act
-            // Program.Process();
+            Program.Process(service, inputMock.Object, outputMock.Object);
 
             // Assert
-            
+            outputMock.Verify(tw => tw.WriteLine(It.IsAny<object>()), Times.Once);
+            inputMock.Verify(tr => tr.ReadLine(), Times.Exactly(2));
         }
     }
 }

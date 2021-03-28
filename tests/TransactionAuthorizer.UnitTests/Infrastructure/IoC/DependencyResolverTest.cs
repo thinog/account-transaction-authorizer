@@ -35,7 +35,6 @@ namespace TransactionAuthorizer.UnitTests.Infrastructure.IoC
             string expectedProvider = "InMemory";
             var resolver = new ResolverConfigurationFaker
             {
-                IsTest = true,
                 UnitOfWork = typeof(UnitOfWorkFaker),
                 AccountRepository = typeof(AccountRepositoryFaker),
                 TransactionRepository = typeof(TransactionRepositoryFaker)
