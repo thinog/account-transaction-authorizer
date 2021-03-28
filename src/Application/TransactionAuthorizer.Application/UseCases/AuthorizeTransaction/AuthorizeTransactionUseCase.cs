@@ -39,7 +39,7 @@ namespace TransactionAuthorizer.Application.UseCases.AuthorizeTransaction
             
             if(account is not null)
             {
-                var transactionsDate = DateTime.Now.AddMinutes(-2);
+                var transactionsDate = inputPort.Transaction.Time.AddMinutes(-2);
                 account.Transactions = _transactionRepository.GetTransactionsByTime(transactionsDate);
             }
 

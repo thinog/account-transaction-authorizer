@@ -13,7 +13,7 @@ namespace TransactionAuthorizer.Infrastructure.Repositories
 
         public IEnumerable<Transaction> GetTransactionsByTime(DateTime time)
         {
-            return _dbSet.Where(t => t.Time >= time);
+            return _dbSet.Where(t => t.Time >= time).ToList();
         }
     }
 }
