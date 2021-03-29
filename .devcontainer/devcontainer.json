@@ -1,0 +1,22 @@
+{
+	"name": ".NET 5 Dev Env",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+
+	"settings": {
+		"terminal.integrated.shell.linux": "/bin/bash"
+	},
+
+	"extensions": [
+		"ms-dotnettools.csharp"
+	],
+
+    "postCreateCommand": "dotnet restore",
+
+    // "runArgs": ["--privileged"],
+
+    // "overrideCommand": false,
+
+    "mounts": ["source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"]
+}
