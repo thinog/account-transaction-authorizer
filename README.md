@@ -4,7 +4,7 @@ Projeto de code challenge do Nubank.
 ## 1. Objetivo
 Aplicação console desenvolvida em .NET que gerencia criação de contas e autoriza transações na mesma.
 
-Tem como objetivo cumprir as regras e usos descritos no arquivo [assets/Coding_Challenge_-_Authorizer.pdf]
+Tem como objetivo cumprir as regras e usos descritos no arquivo [assets/Coding_Challenge_-_Authorizer.pdf](assets/Coding_Challenge_-_Authorizer.pdf)
 
 ---
 
