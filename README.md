@@ -13,6 +13,8 @@ Tem como objetivo cumprir as regras e usos no arquivo [assets/Coding_Challenge_-
   - [Extensão Remote Containers][remote-containers]
 - [Docker][docker]
 
+O ambiente de desenvolvimento é executado dentro de um remote-container, gerenciado pelo VS Code. Por isso a necessidade dele e da extensão. Caso o VS Code não mostre um pop-up orientando a abrir a aplicação em um remote-container, basta pressionar Ctrl+Shift+p e escrever "remote containers open attached", que será apresentada a opção de abrir o ambiente de desenvolvimento containerizado. **Todos os comandos devem ser executados de dentro desse container.**
+
 ---
 
 ## 3. Decisões arquiteturais
