@@ -13,7 +13,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
     <RuntimeIdentifiers>linux-musl-x64</RuntimeIdentifiers>
-    <!-- <TargetName>authorize</TargetName> -->
+    <AssemblyName>authorize</AssemblyName>
   </PropertyGroup>
 
 </Project>

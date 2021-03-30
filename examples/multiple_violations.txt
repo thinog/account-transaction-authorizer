@@ -1,12 +1,13 @@
 {"account": {"active-card": true, "available-limit": 500}}
 {"account": {"active-card": false, "available-limit": 200}}
-{"transaction": {"merchant": "Burger King", "amount": 20, "time":"2019-02-13T10:00:00.000Z"}}
-{"transaction": {"merchant": "Habbib's", "amount": 80, "time":"2019-02-13T11:00:00.000Z"}}
-{"transaction": {"merchant": "Burger King", "amount": 20, "time":"2019-02-13T10:00:00.000Z"}}
-{"transaction": {"merchant": "Habbib's", "amount": 90, "time":"2019-02-13T10:01:00.000Z"}}
-{"transaction": {"merchant": "McDonald's", "amount": 50, "time":"2019-02-13T10:01:30.000Z"}}
-{"transaction": {"merchant": "Wendy's", "amount": 30, "time":"2019-02-13T10:01:45.000Z"}}
-{"transaction": {"merchant": "Burger King", "amount": 20, "time":"2019-03-13T10:00:00.000Z"}}
-{"transaction": {"merchant": "Burger King", "amount": 20, "time":"2019-03-13T10:01:00.000Z"}}
-{"transaction": {"merchant": "Burger King", "amount": 20, "time":"2019-04-13T10:00:00.000Z"}}
-{"transaction": {"merchant": "Habbib's", "amount": 80, "time":"2019-04-13T11:00:00.000Z"}}
+{"transaction": {"merchant": "Burger King", "amount": 20, "time":"2019-01-01T10:00:00.000Z"}}
+{"transaction": {"merchant": "Habbib's", "amount": 80, "time":"2019-02-10T10:00:00.000Z"}}
+{"transaction": {"merchant": "Burger King", "amount": 20, "time":"2019-02-10T10:01:00.000Z"}}
+{"transaction": {"merchant": "Habbib's", "amount": 90, "time":"2019-02-10T10:01:15.000Z"}}
+{"transaction": {"merchant": "McDonald's", "amount": 50, "time":"2019-02-10T10:01:30.000Z"}}
+{"transaction": {"merchant": "Wendy's", "amount": 30, "time":"2019-02-10T10:01:45.000Z"}}
+{"transaction": {"merchant": "Wendy's", "amount": 30, "time":"2019-02-10T10:03:00.000Z"}}
+{"transaction": {"merchant": "Burger King", "amount": 20, "time":"2019-04-20T10:00:00.000Z"}}
+{"transaction": {"merchant": "Burger King", "amount": 20, "time":"2019-04-20T10:01:00.000Z"}}
+{"transaction": {"merchant": "Burger King", "amount": 20, "time":"2019-04-20T10:10:00.000Z"}}
+{"transaction": {"merchant": "Habbib's", "amount": 80, "time":"2019-05-30T19:00:00.000Z"}}

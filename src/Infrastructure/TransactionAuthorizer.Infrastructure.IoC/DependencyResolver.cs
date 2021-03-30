@@ -30,8 +30,8 @@ namespace TransactionAuthorizer.Infrastructure.IoC
             serviceCollection.AddScoped(typeof(ITransactionRepository), configuration?.TransactionRepository ?? typeof(TransactionRepository));
             serviceCollection.AddScoped(typeof(IAccountRepository), configuration?.AccountRepository ?? typeof(AccountRepository));
 
-            serviceCollection.AddScoped<AuthorizeTransactionUseCase>();
-            serviceCollection.AddScoped<CreateAccountUseCase>();
+            serviceCollection.AddTransient<AuthorizeTransactionUseCase>();
+            serviceCollection.AddTransient<CreateAccountUseCase>();
 
             return serviceCollection;
         }

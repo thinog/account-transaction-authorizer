@@ -1,9 +1,10 @@
 # Transaction Authorizer
 Projeto de code challenge do Nubank.
 
+## 1. Objetivo
 Aplicação console desenvolvida em .NET que gerencia criação de contas e autoriza transações na mesma.
 
-## 1. Objetivo
+Tem como objetivo cumprir as regras e usos no arquivo [assets/Coding_Challenge_-_Authorizer.pdf]
 
 ---
 
@@ -23,7 +24,7 @@ Aplicação console desenvolvida em .NET que gerencia criação de contas e auto
 - **Domain:** Núcleo da aplicação. Armazena as principais interfaces, enums e entidades do sistema. Não possui nenhuma lógica associada a negócio. Criei as entidades com propriedades diferentes dos modelos da camada de Application apenas para provar o ponto de que o core da aplicação não está sujeito a negócio ou apresentação. Outras camadas devem se adaptar ao core e suas evoluções, não o contrário.
 
 ### 3.2. Patterns utilizados
-- **Dependency Injection:** Utilizei com o objetivo de diminuir o acoplamento entre camadas, melhorar a testabilidade do código e, principalmente, seguir os conceitos de SOLID. Também ajuda a deixar o código mais limpo, visto que remove a necessidade de instanciar manualmente todas as dependências. Como a aplicação não deve manter estado entre execuções, optei por injetar todas dependências com lifetime scoped;
+- **Dependency Injection:** Utilizei com o objetivo de diminuir o acoplamento entre camadas, melhorar a testabilidade do código e, principalmente, seguir os conceitos de SOLID. Também ajuda a deixar o código mais limpo, visto que remove a necessidade de instanciar manualmente todas as dependências. Como a aplicação não deve manter estado entre execuções, optei por injetar as dependências dos casos de uso como Transient, para serem reinstanciadas a cada chamada, evitando assim que o output seja "cacheado", e as outras classes como Scoped, sendo instanciadas a cada requisição à aplicação;
 - **Repository:** Visei isolar o acesso a dados da camada de Application. Consigo criar repositórios especializados e, na estrutura que montei, posso ter um base genérico, para evitar duplicação desnecessária de código;
 - **Unit of Work:** Com o UoW, posso trabalhar tranquilamente com transações compostas de escrita de dados sem precisar me preocupar que sejam feitas pela metade. Faço toda escrita/leitura necessária e concretizo a transação completa com a ajuda desse pattern;
 - **Factory Method:** Como a chamada da aplicação vem por um único ponto de entrada e esse ponto de entrada pode receber diversos objetos diferentes (cada qual tendo um set diferente de regras de negócio), optei por gerir a chamada do caso de uso por meio desse pattern. Todos os casos de uso recebem um atributo chamado "HandledObjectAttribute", que possui o tipo de objeto/input que aquele caso de uso processa. Então consigo segregar os objetos por caso de uso, utilizando de código genérico e extensível. Também consigo ignorar objetos que não são tratados pelo sistema;
@@ -52,36 +53,53 @@ Utilizei as seguintes bibliotecas/ferramentas:
 - [Report Generator][report-generator]: Ferramenta que utilizo para gerar uma visualização em HTML dos relatórios Open Cover gerados pelo Coverlet. Com essa visualização consigo ver a cobertura da minha aplicação de linha por linha.
 
 ### 3.7. Testes de integração
-Como a aplicação possui apenas dois casos de uso e possui uma cobertura alta de testes de unidade, optei por criar um script que realiza o teste de todos cenários que mapeei, porém a validação é manual. Aumentando os cenários da aplicação e com mais tempo, testes integrados automatizados são uma decisão mais sábia.
+Como a aplicação possui apenas dois casos de uso e possui uma cobertura alta de testes de unidade, além de ter um único ponto de entrada, optei por criar um script que gera o executável da aplicação e realiza o teste de todos cenários que mapeei, porém a validação é manual. Aumentando os cenários da aplicação e com mais tempo, testes integrados com validação automática são uma decisão mais sábia.
 
 ---
 
-## 4. Uso e comandos
-dotnet test -p:CollectCoverage=true -p:CoverletOutputFormat=opencover -p:CoverletOutput='./results/'
-
-dotnet new tool-manifest
-
-dotnet tool install dotnet-reportgenerator-globaltool
-
-dotnet reportgenerator "-reports:OpenCover.xml" "-targetdir:coveragereport" -reporttypes:Html
-
-
-# Executando o projeto
+## 4. Execução e comandos
+Compilar:
+```bash
 dotnet build
-./src/Presentation/TransactionAuthorizer.Presentation.CLI/bin/Debug/net5.0/TransactionAuthorizer.Presentation.CLI.exe < operations.txt
+```
 
-TODO:
+Executar testes unitários e visualizar resumo de cobertura:
+```bash
+dotnet test -p:CollectCoverage=true
+```
+
+Executar testes unitários, visualizar resumo de cobertura e gerar relatórios completos (após os comandos, basta abrir o arquivo 'tests/TransactionAuthorizer.UnitTests/results/report/index.html' no navegador)
+```bash
+dotnet test -p:CollectCoverage=true -p:CoverletOutputFormat=opencover -p:CoverletOutput='./results/'
+dotnet reportgenerator "-reports:tests/TransactionAuthorizer.UnitTests/results/coverage.opencover.xml" "-targetdir:tests/TransactionAuthorizer.UnitTests/results/report" -reporttypes:Html
+```
+
+Publicar aplicação (após a execução desse comando, o programa "authorize" pode ser chamado de qualquer ponto do SO):
+```bash
+./publish.sh
+```
+
+Executar a aplicação:
+```bash
+authorize < arquivo_entrada
+```
+
+Deixei exemplos de arquivo de entrada já montados na pasta 'examples/'
+
+---
+
+Por fim, resolvi preservar o checklist que criei no início do desafio:
 - [x] Process account creation
 - [x] Process transactions
 - [x] Dependency Injection
 - [x] EF Core In-Memory
 - [x] Transaction / UnitOfWork
 - [x] Unit tests with high code coverage (>= 80%)
-- [ ] Integration tests
-- [x] Validate all error scenarios
-- [ ] Dockerize the application
-- [ ] Publish/run scripts
-- [x] Dev env script
+- [x] Integration tests
+- [x] Validate combined error scenarios
+- [x] Dockerize the application
+- [x] Publish/run scripts
+- [x] Describe architectural decisions in README file
 
 
 [vscode]: https://code.visualstudio.com/download

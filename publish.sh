@@ -1,21 +1,18 @@
 #!/bin/bash
 
 csproj='src/Presentation/TransactionAuthorizer.Presentation.CLI/TransactionAuthorizer.Presentation.CLI.csproj'
+output_dir=dist/release/linux/
+
+rm -rf $output_dir
 
 dotnet publish \
     $csproj \
     --configuration Release \
     --framework net5.0 \
-    --runtime linux-musl-x64 \
-    --output dist/linux/ \
+    --output $output_dir \
     -p:DebugType=None \
-    -p:DebugSymbols=false \
-    --self-contained
+    -p:DebugSymbols=false
 
-    # -p:PublishReadyToRun=false \
-    # -p:PublishSingleFile=false \
-    # -p:UseAppHost=true \
-
-docker pull alpine:latest
-
-docker build -t transaction-authorizer .
+mkdir -p /opt/authorize
+rm -rf /opt/authorize/*
+cp -r $output_dir* /opt/authorize/
