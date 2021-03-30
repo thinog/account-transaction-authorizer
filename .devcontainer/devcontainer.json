@@ -12,5 +12,5 @@
 		"ms-dotnettools.csharp"
 	],
 
-    "postCreateCommand": "dotnet restore",
+    "postCreateCommand": "dotnet restore && dotnet tool restore",
 }
