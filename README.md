@@ -1,5 +1,5 @@
 # Transaction Authorizer
-Projeto de code challenge do Nubank.
+Projeto de code challenge de uma empresa aí rs
 
 ## 1. Objetivo
 Aplicação console desenvolvida em .NET que gerencia criação de contas e autoriza transações na mesma.
